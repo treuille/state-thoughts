@@ -73,6 +73,7 @@ def _wrap_widget(widget_func, callback_label):
 
 text_input = _wrap_widget(st.text_input, "on_change")
 number_input = _wrap_widget(st.number_input, "on_change")
+slider = _wrap_widget(st.slider, "on_change")
 button = _wrap_widget(st.button, "on_click")
 
 

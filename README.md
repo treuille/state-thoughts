@@ -4,9 +4,8 @@ A writeup of my thoughts on the current state model
 
 ## Todo
 
-- Copy over the `st_event` from the other repo
-- List out all the examples I want to do 
-- Code them up
+- Code up existing examples
+- Look for more examples from the state example
 - Write up my notes on why I did what I did
 - Write up general principles I think are important for 
     - state
