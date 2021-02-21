@@ -5,7 +5,6 @@ import streamlit as st
 from typing import Optional, Any, Union
 import functools
 
-
 #######################
 # Global event object #
 #######################
@@ -13,7 +12,7 @@ import functools
 # This is a sentinal meaning that no signal has been recieved
 class NoSignal:
     pass
-_no_signal = NoSignal
+_no_signal = NoSignal()
 
 
 # This is the label of the last event that just fired
