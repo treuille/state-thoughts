@@ -14,6 +14,9 @@ Here we are trying to get two sliders to be linked together.
 
 - This live reloading thing with state is just absolutely amazing from 
   a workflow perspective.
+
+- Note that launching the balloons resets the sliders. I think we need to
+  consider something like DONT_CHANGE for linked sliders.
 """
 
 import streamlit as st
@@ -23,6 +26,8 @@ import st_event
 to_celcius = lambda fahrenheit: (fahrenheit - 32) * 5.0 / 9.0
 to_fahrenheit = lambda celsius: 9.0 / 5.0 * celsius + 32
 
+min_celsius, max_celsius = -100.0, 100.0
+
 def example_with_callbacks():
     """An example of two linked sliders using callbacks."""
     state = st.beta_session_state() 
@@ -31,7 +36,6 @@ def example_with_callbacks():
 def example_with_signals():
     """An example of two linked sliders using signals."""
     # Let's add some signal handlers here
-    min_celsius, max_celsius = -100.0, 100.0
     if st_event.signal("Celsius"):
         celsius = st_event.value()
         fahrenheit = to_fahrenheit(celsius)
