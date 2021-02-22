@@ -2,12 +2,21 @@
 a global-event style."""
 
 import streamlit as st
-from typing import Optional, Any, Union
+from typing import Optional, Any, Union, Dict, cast
 import functools
 
-#######################
-# Global event object #
-#######################
+# ########################
+# # DONT_CHANGE Sentinal #
+# ########################
+
+# # This sentinal indicates that the value of the given widget shouldn't change
+# class DontChange:
+#     pass
+# DONT_CHANGE = DontChange()
+
+# ######################
+#  Global event object #
+# ######################
 
 # This is a sentinal meaning that no signal has been recieved
 class NoSignal:
@@ -20,7 +29,9 @@ _event_signal: Optional[Union[str, NoSignal]] = _no_signal
 
 
 # This is the value of the last event that just fired
-_event_value: Any = None
+# In "real code," we'd need to be more careful this resets properly when
+# widget arguments change.
+_widget_values: Dict[str, Any] = {}
 
 
 # Optionally, the user may set a "context" for an event, which is simply
@@ -49,9 +60,9 @@ def _wrap_widget(widget_func, callback_label):
 
             # Set the global event value
             if len(args) == 0:
-                _event_value = None
+                _widget_values[_event_signal] = None
             elif len(args) == 1:
-                _event_value = args[0]
+                _widget_values[_event_signal] = args[0]
             else:
                 err_str = f"Not expecting a callback with {len(args)} args."
                 raise RuntimeError(err_str)
@@ -62,6 +73,16 @@ def _wrap_widget(widget_func, callback_label):
         # Actually create the widget now
         widget_kwargs = dict(kwargs)
         widget_kwargs[callback_label] = generic_callback
+        # value = kwargs.get("value", None)
+        # if value is DONT_CHANGE:
+        #     if _event_signal in _widget_values:
+        #         widget_kwargs["value"] = _widget_values[_event_signal]
+        #     else:
+        #         widget_kwargs["value"] = None
+        # else:
+        #     widget_kwargs["value"] = value
+        # st.write("args", args)
+        # st.write("kwargs", kwargs)
         return widget_func(label, *args, **widget_kwargs)
 
     return wrapped_widget
@@ -90,7 +111,7 @@ def signal(signal: str) -> bool:
 
 def value() -> Any:
     """Returns the value of the event."""
-    return _event_value
+    return _widget_values[cast(str, _event_signal)]
 
 def context() -> Any:
     """Returns the context for the event."""
