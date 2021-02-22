@@ -26,15 +26,54 @@ import st_event
 to_celcius = lambda fahrenheit: (fahrenheit - 32) * 5.0 / 9.0
 to_fahrenheit = lambda celsius: 9.0 / 5.0 * celsius + 32
 
-min_celsius, max_celsius = -100.0, 100.0
+MIN_CELCIUS, MAX_CELCIUS = -100.0, 100.0
 
 def example_with_callbacks():
-    """An example of two linked sliders using callbacks."""
+    """
+    ## Notes on the callback example
+
+    - I had to reset the state in this complex way because I wasn't sure where
+      else the state may have been used. :(
+
+    - In a way, I find this example simpler to understand than the example 
+      with signals, because it's more obvious how it works
+      
+    - One thing I don't like about this is that it feels like the state is
+      "taking over" and the Streamlit dataflow style is becoming a detail.
+      I feel like there's a way of marrying them more closely.
+    """
+    # Get and initialize the state.
     state = st.beta_session_state() 
-    
+    if 'temperature_celcius' not in dir(state):
+        state.temperature_celcius = MIN_CELCIUS
+
+    # Callbacks if something changes
+    def celcius_changed(new_celcius_temperature):
+        state.temperature_celcius = new_celcius_temperature
+
+    def fahrenheit_changed(new_fahrenheit_temperature):
+        state.temperature_celcius = to_celcius(new_fahrenheit_temperature)
+
+    celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS,
+            state.temperature_celcius, on_change=celcius_changed)
+    fahrenheit = st.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
+            to_fahrenheit(MAX_CELCIUS), 
+            to_fahrenheit(state.temperature_celcius),
+            on_change=fahrenheit_changed)
+    st.write(f"`{celsius}c` == `{fahrenheit}f`")
+        
 
 def example_with_signals():
-    """An example of two linked sliders using signals."""
+    """
+    # Notes on the signals example
+
+    - Note that launching the balloons resets the sliders. I think we need to
+      consider something like DONT_CHANGE for linked sliders.
+
+    - One thing that's kinda complicated about this example is that it's 
+      kinda weird how you're juggling these two pieces of state (fahrenheit and
+      celsius) in a tricky way.
+    """
     # Let's add some signal handlers here
     if st_event.signal("Celsius"):
         celsius = st_event.value()
@@ -46,11 +85,14 @@ def example_with_signals():
         celsius, fahrenheit = None, None
 
     # Now actually display the sliders
-    celsius = st_event.slider("Celsius", min_celsius, max_celsius, celsius)
-    fahrenheit = st_event.slider("Fahrenheit", to_fahrenheit(min_celsius),
-            to_fahrenheit(max_celsius), fahrenheit)
+    celsius = st_event.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, celsius)
+    fahrenheit = st_event.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
+            to_fahrenheit(MAX_CELCIUS), fahrenheit)
 
-    # To test the effect of a separate signal, let's add one here.
+    st.write(f"`{celsius}c` == `{fahrenheit}f`")
+
+    # Note that launching the balloons resets the sliders. I think we need to
+    # consider something like DONT_CHANGE for linked sliders.
     if st_event.signal("Balloons"):
         st.balloons()
     st_event.button("Balloons")
