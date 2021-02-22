@@ -60,8 +60,9 @@ def example_with_callbacks():
             to_fahrenheit(MAX_CELCIUS), 
             to_fahrenheit(state.temperature_celcius),
             on_change=fahrenheit_changed)
+
     st.write(f"`{celsius}c` == `{fahrenheit}f`")
-        
+
 
 def example_with_signals():
     """

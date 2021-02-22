@@ -4,7 +4,6 @@ A writeup of my thoughts on the current state model
 
 ## Todo
 
-- Code up first example (with callbacks)
 - Put it in the context of a nice little explanatory app
     - Main page
     - Link for all the other pages
