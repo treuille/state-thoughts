@@ -90,10 +90,13 @@ def example_with_signals():
     fahrenheit = st_event.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
             to_fahrenheit(MAX_CELCIUS), fahrenheit)
 
-    st.write(f"`{celsius}c` == `{fahrenheit}f`")
+    st.write(f"`{celsius}`c == `{fahrenheit}`f")
 
     # Note that launching the balloons resets the sliders. I think we need to
     # consider something like DONT_CHANGE for linked sliders.
+    st.warning(
+        "☣️ Clicking the button below will mess up the state. "
+        "We need to fix this.")
     if st_event.signal("Balloons"):
         st.balloons()
     st_event.button("Balloons")

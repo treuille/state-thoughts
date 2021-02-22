@@ -19,14 +19,25 @@ def main():
 
 def display_example(example):
     """Show how an example works with differnet code snippets."""
-    example_with_callbacks = getattr(example, "example_with_callbacks")
-    """
-    # Example with callbacks
-    ## Code
-    """
-    display_function_code(example_with_callbacks)
-    "## Results"
-    example_with_callbacks()
+    # Let the user select the example type
+    example_types = {
+        "Callbacks": ("example_with_callbacks", "notes_on_callbacks"),
+        "Signals": ("example_with_signals", "notes_on_signals"),
+    }
+    example_name, (func_attr, notes_attr) = st.sidebar.radio("Example type",
+        list(example_types.items()), format_func=lambda item: item[0])
+    func = getattr(example, func_attr)
+
+    # Display the title
+    st.write(f"# Example with {example_name}")
+
+    # Display the code
+    st.write("## Code")
+    display_function_code(func)
+
+    # Display the live demo
+    "## Live demo"
+    func()
 
 def display_function_code(func):
     """Displays the code of a function, stripping out the defintion and
