@@ -30,8 +30,6 @@ MIN_CELCIUS, MAX_CELCIUS = -100.0, 100.0
 
 def example_with_callbacks():
     """
-    ## Notes on the callback example
-
     - I had to reset the state in this complex way because I wasn't sure where
       else the state may have been used. :(
 
@@ -66,10 +64,7 @@ def example_with_callbacks():
 
 def example_with_signals():
     """
-    # Notes on the signals example
-
-    - Note that launching the balloons resets the sliders. I think we need to
-      consider something like DONT_CHANGE for linked sliders.
+    - consider something like DONT_CHANGE for linked sliders
 
     - One thing that's kinda complicated about this example is that it's 
       kinda weird how you're juggling these two pieces of state (fahrenheit and

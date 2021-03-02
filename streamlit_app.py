@@ -9,7 +9,7 @@ def main():
     """Exection starts here."""
     # Setup the main navigation in the sidebar
     examples = {
-        "Linked sliders example": linked_sliders,
+        "Linked sliders": linked_sliders,
     }
     options = ["Summary"] + list(examples.keys())
     selected_page = st.sidebar.radio("Select page", options)
@@ -21,23 +21,28 @@ def display_example(example):
     """Show how an example works with differnet code snippets."""
     # Let the user select the example type
     example_types = {
-        "Callbacks": ("example_with_callbacks", "notes_on_callbacks"),
-        "Signals": ("example_with_signals", "notes_on_signals"),
+        "Callbacks": "example_with_callbacks",
+        "Signals": "example_with_signals", 
     }
-    example_name, (func_attr, notes_attr) = st.sidebar.radio("Example type",
+    example_name, func_attr = st.sidebar.radio("Example type",
         list(example_types.items()), format_func=lambda item: item[0])
     func = getattr(example, func_attr)
 
     # Display the title
-    st.write(f"# Example with {example_name}")
+    example.__doc__
 
     # Display the code
+    st.write(f"# Example with {example_name}")
     st.write("## Code")
     display_function_code(func)
 
     # Display the live demo
     "## Live demo"
     func()
+
+    # Display the notes
+    f"## {example_name} Notes"
+    func.__doc__
 
 def display_function_code(func):
     """Displays the code of a function, stripping out the defintion and
