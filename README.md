@@ -4,12 +4,6 @@ A writeup of my thoughts on the current state model
 
 ## Todo
 
-- Put it in the context of a nice little explanatory app
-    - Main page
-    - Link for all the other pages
-    - Explanation for the main page
-    - Explanation for each example
-    - Deeper exploration of each example
 - Then put together the second example
 - Look for more examples from the state example
 - Write up my notes on why I did what I did
@@ -28,7 +22,6 @@ A writeup of my thoughts on the current state model
 
 ## Examples
 
-- Two linked sliders
 - Non-trivial state initialization
 - Errors before and after 
 - closures
@@ -53,3 +46,14 @@ A writeup of my thoughts on the current state model
   state. They have similar enough semantics (aka they stay around between runs)
   that you might use them intergchangeably. (I did in st_event.py.) But they
   don't reset at the same time, which can be the source of subtle bugs.
+
+- **There's something to be figured out about how to do the interaction with
+  auto-reload and state initialization.** For example, maybe if the state
+  intialization code changes, the state needs to be reset? Or maybe when the
+  code auto-reloads, it should indicate with a toast that it's resuing the
+  previous state, and then offer the ability to click to reset the state.
+
+- I feel like callbacks have a way of taking over the whole script and forcing
+  the user to resort to a mode where the entire state of the script is
+  encapsulated by the state. Is that really what we want?
+
