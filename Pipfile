@@ -5,8 +5,9 @@ name = "pypi"
 
 [packages]
 mypy = "*"
-streamlit = {path = "./streamlit-0.75.0-py2.py3-none-any.whl"}
+streamlit = {path = "./streamlit-0.76.0-py2.py3-none-any.whl"}
 rope = "*"
+pylint = "*"
 
 [dev-packages]
 rope = "*"
