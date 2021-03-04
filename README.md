@@ -57,3 +57,6 @@ A writeup of my thoughts on the current state model
   the user to resort to a mode where the entire state of the script is
   encapsulated by the state. Is that really what we want?
 
+- In general, there's a big issue if `st.beta_session_state()` is called in two
+  different parts of the code becuase they may not initialize the same values.
+
