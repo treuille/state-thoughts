@@ -5,7 +5,6 @@ This is an example where we're trying to initialize the state properly
 """
 
 import streamlit as st
-import st_event
 import numpy as np
 
 def example_with_callbacks():

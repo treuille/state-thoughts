@@ -20,7 +20,6 @@ Here we are trying to get two sliders to be linked together.
 """
 
 import streamlit as st
-import st_event
 
 # Convert between fahrenheit and celsius
 to_celcius = lambda fahrenheit: (fahrenheit - 32) * 5.0 / 9.0
@@ -39,9 +38,19 @@ def example_with_callbacks():
     - One thing I don't like about this is that it feels like the state is
       "taking over" and the Streamlit dataflow style is becoming a detail.
       I feel like there's a way of marrying them more closely.
+
+    - This example failed for me:
+      ```py
+      state = st.beta_session_state() 
+      if 'temperature_celcius' not in dir(state):
+          state.temperature_celcius = MIN_CELCIUS
+      ```
+      With the following message: *StreamlitAPIException: Session state
+      variable has not been initialized: "temperature_celcius"*. Is this really
+      what we want??
     """
     # Get and initialize the state.
-    state = st.beta_session_state() 
+    state = st.beta_session_state(temperature_celcius=MIN_CELCIUS) 
     if 'temperature_celcius' not in dir(state):
         state.temperature_celcius = MIN_CELCIUS
 
@@ -50,6 +59,10 @@ def example_with_callbacks():
         state.temperature_celcius = new_celcius_temperature
 
     def fahrenheit_changed(new_fahrenheit_temperature):
+        st.warning(
+            f"fahrenheit_changed: {new_fahrenheit_temperature} "
+            f"{type(new_fahrenheit_temperature)}")
+        st.stop()
         state.temperature_celcius = to_celcius(new_fahrenheit_temperature)
 
     celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS,

@@ -1,5 +1,4 @@
 import streamlit as st
-import st_event
 import linked_sliders
 import non_trivial_init
 import inspect
