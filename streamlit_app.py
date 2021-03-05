@@ -1,6 +1,7 @@
 import streamlit as st
 import linked_sliders
 import non_trivial_init
+import annotation
 import inspect
 import re
 import textwrap
@@ -10,7 +11,8 @@ def main():
     # Setup the main navigation in the sidebar
     examples = {
         "Linked sliders": linked_sliders,
-        "Non-trivial state initialization": non_trivial_init
+        "Non-trivial state initialization": non_trivial_init,
+        "Annotation": annotation
     }
     options = ["Summary"] + list(examples.keys())
     selected_page = st.sidebar.radio("Select page", options)
