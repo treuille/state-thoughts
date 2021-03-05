@@ -51,18 +51,12 @@ def example_with_callbacks():
     """
     # Get and initialize the state.
     state = st.beta_session_state(temperature_celcius=MIN_CELCIUS) 
-    if 'temperature_celcius' not in dir(state):
-        state.temperature_celcius = MIN_CELCIUS
 
     # Callbacks if something changes
     def celcius_changed(new_celcius_temperature):
         state.temperature_celcius = new_celcius_temperature
 
     def fahrenheit_changed(new_fahrenheit_temperature):
-        st.warning(
-            f"fahrenheit_changed: {new_fahrenheit_temperature} "
-            f"{type(new_fahrenheit_temperature)}")
-        st.stop()
         state.temperature_celcius = to_celcius(new_fahrenheit_temperature)
 
     celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS,
