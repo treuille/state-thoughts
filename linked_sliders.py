@@ -78,19 +78,19 @@ def example_with_signals():
       celsius) in a tricky way.
     """
     # Let's add some signal handlers here
-    if st_event.signal("Celsius"):
-        celsius = st_event.value()
+    if st.beta_signal("Celsius"):
+        celsius = st.beta_signal_value()
         fahrenheit = to_fahrenheit(celsius)
-    elif st_event.signal("Fahrenheit"):
-        fahrenheit = st_event.value()
+    elif st.beta_signal("Fahrenheit"):
+        fahrenheit = st.beta_signal_value()
         celsius = to_celcius(fahrenheit)
     else:
         celsius, fahrenheit = None, None
 
     # Now actually display the sliders
-    celsius = st_event.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, celsius)
-    fahrenheit = st_event.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
-            to_fahrenheit(MAX_CELCIUS), fahrenheit)
+    celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, celsius, signal="Celsius")
+    fahrenheit = st.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
+            to_fahrenheit(MAX_CELCIUS), fahrenheit, signal="Fahrenheit")
 
     st.write(f"`{celsius}`c == `{fahrenheit}`f")
 
@@ -99,6 +99,6 @@ def example_with_signals():
     st.warning(
         "☣️ Clicking the button below will mess up the state. "
         "We need to fix this.")
-    if st_event.signal("Balloons"):
+    if st.beta_signal("Balloons"):
         st.balloons()
-    st_event.button("Balloons")
+    st.button("Balloons", signal="Balloons")

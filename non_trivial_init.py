@@ -7,13 +7,14 @@ This is an example where we're trying to initialize the state properly
 import streamlit as st
 import numpy as np
 
+
 def example_with_callbacks():
     """
     - The use of callbacks here makes it easy to avoid off-by-one errors.
     """
     rows = st.slider("Rows", 1, 10, 5)
     cols = st.slider("Columns", 1, 10, 5)
-    state = st.beta_session_state(rows=None, cols=None)
+    state = st.beta_session_state(rows=None, cols=None, data=0)
     if rows != state.rows or cols != state.cols:
         state.rows = rows
         state.cols = cols
@@ -38,10 +39,10 @@ def example_with_signals():
     """
     rows = st.slider("Rows", 1, 10, 5)
     cols = st.slider("Columns", 1, 10, 5)
-    state = st.beta_session_state(rows=None, cols=None)
-    if st_event.signal("Increment data"):
+    state = st.beta_session_state(rows=None, cols=None, data=0)
+    if st.beta_signal("Increment data"):
         state.data += 1
-    elif st_event.signal("Reset state"):
+    elif st.beta_signal("Reset state"):
         state.rows = state.cols = None
     if rows != state.rows or cols != state.cols:
         state.rows = rows
@@ -51,5 +52,5 @@ def example_with_signals():
             for j in range(cols):
                 state.data[i, j] = (i + j) % 2
     st.write(state.data)
-    st_event.button("Increment data")
-    st_event.button("Reset state")
+    st.button("Increment", signal="Increment data")
+    st.button("Reset", signal="Reset state")
