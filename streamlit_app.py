@@ -15,8 +15,28 @@ def main():
     options = ["Summary"] + list(examples.keys())
     selected_page = st.sidebar.radio("Select page", options)
 
-    if selected_page in examples:
+    if selected_page == "Summary":
+        display_summary()
+    elif selected_page in examples:
         display_example(examples[selected_page])
+
+def display_summary():
+    """Display the summary information."""
+
+    # These are the new functions that have been added to this wheel
+    new_funcs = [
+        "beta_widget_value",
+        "beta_widget_value",
+        "beta_signal_context",
+        "signal" 
+    ]
+
+    """
+    # State Tests
+    Here are the new functions that are defined in this module
+    """
+    for func in new_funcs:
+        st.write(f"### `{func}`", getattr(st, func))
 
 def display_example(example):
     """Show how an example works with differnet code snippets."""
