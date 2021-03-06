@@ -22,7 +22,6 @@ A writeup of my thoughts on the current state model
 
 ## Examples
 
-- Non-trivial state initialization
 - Errors before and after 
 - closures
 - sliders that re-initialize the state
