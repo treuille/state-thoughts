@@ -6,6 +6,15 @@ import inspect
 import re
 import textwrap
 
+# This is the list of prototypes which we're testing, mapped to the name of
+# the function in the example module which demonstrates that prototype
+# on that eample. For example the the code implementing the signals prototype on
+# the linked sliders example is called linked_sliders.example_with_signals().
+PROTOTYPES = {
+    "Callbacks": "example_with_callbacks",
+    "Signals": "example_with_signals",
+    "beta_state": "example_with_beta_state",
+}
 
 def main():
     """Exection starts here."""
@@ -49,21 +58,18 @@ def display_summary():
 
 def display_example(example):
     """Show how an example works with differnet code snippets."""
-    # Let the user select the example type
-    example_types = {
-        "Callbacks": "example_with_callbacks",
-        "Signals": "example_with_signals",
-    }
-    example_name, func_attr = st.sidebar.radio(
-        "Example type", list(example_types.items()), format_func=lambda item: item[0]
-    )
-    func = getattr(example, func_attr)
+    # This is the set of prototypes which are defined in this example module
+    valid_prototypes = [name for name, func_name in PROTOTYPES.items()
+            if hasattr(example, func_name)]
+
+    prototype_name = st.sidebar.radio("Example type", valid_prototypes)
+    func = getattr(example, PROTOTYPES[prototype_name])
 
     # Display the title
     example.__doc__
 
     # Display the code
-    st.write(f"# Example with {example_name}")
+    st.write(f"# Example with {prototype_name}")
     st.write("## Code")
     display_function_code(func)
 
@@ -72,7 +78,7 @@ def display_example(example):
     func()
 
     # Display the notes
-    f"## {example_name} Notes"
+    f"## {prototype_name} Notes"
     func.__doc__
 
 
