@@ -43,6 +43,9 @@ def display_summary():
     for func in new_funcs:
         st.write(f"### `{func}`", getattr(st, func))
 
+    # Also writ the beta_state.init function
+    st.write("### `beta_state.init`", st.beta_state.init)
+
 
 def display_example(example):
     """Show how an example works with differnet code snippets."""
