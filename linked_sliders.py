@@ -76,21 +76,42 @@ def example_with_signals():
     - One thing that's kinda complicated about this example is that it's 
       kinda weird how you're juggling these two pieces of state (fahrenheit and
       celsius) in a tricky way.
+
+    [Amanda]:
+    - The idea is essentially the widget_values feature I implemented, except
+      we make having a key disable widgets updating in response to changing input values.
+      The key here is that by making the value explicitly copy from the previous run,
+      it becomes much clearer what the value should be each time.
+    - Automatically resetting in response to input changing would work here but we're
+      still discussing the design of that for other situations. So this also showcases
+      a possible design where widgets are assumed to retain their identity and local state
+      unless and until we assign it explicitly.
+    - I'm not sold on this aspect of the design, because I really like the
+      declarative feel of each widget being a pure function of its arguments.
+    - To lean into the obvious React analogy, each widget is a function of its props and
+      local state, except we currently don't distinguish those, and so either wipe out our
+      state when props change, or we lose the ability to set state from the outside.
+      This seems like a very important direction to explore.
     """
     # Let's add some signal handlers here
     if st.beta_signal("Celsius"):
-        celsius = st.beta_signal_value()
-        fahrenheit = to_fahrenheit(celsius)
+        c = st.beta_signal_value()
+        f = to_fahrenheit(c)
     elif st.beta_signal("Fahrenheit"):
-        fahrenheit = st.beta_signal_value()
-        celsius = to_celcius(fahrenheit)
+        f = st.beta_signal_value()
+        c = to_celcius(f)
     else:
-        celsius, fahrenheit = None, None
+        # beta_widget_value doesn't return what I expected, so these are differently named to
+        # empahsize that this part is imaginary
+        c = st.previous_widget_value('c')
+        f = st.previous_widget_value('f')
 
     # Now actually display the sliders
-    celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, celsius, signal="Celsius")
+    celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, signal="Celsius", key='c')
+    celsius.value = c
     fahrenheit = st.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
-            to_fahrenheit(MAX_CELCIUS), fahrenheit, signal="Fahrenheit")
+                           to_fahrenheit(MAX_CELCIUS), signal="Fahrenheit", key='f')
+    fahrenheit.value = f
 
     st.write(f"`{celsius}`c == `{fahrenheit}`f")
 
