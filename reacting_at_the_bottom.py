@@ -23,16 +23,16 @@ def example_with_callbacks():
     """
     - Note that the callbacks version is much longer here.
     """
-    state = st.beta_session_state(color=None)
+    st.beta_state.init("color", None)
     def set_color(color):
         def callback():
-            state.color = color
+            st.beta_state.set("color", color)
         return callback
     st.button("Blue", on_click=set_color("Blue"))
     st.button("Yellow", on_click=set_color("Yellow"))
-    if state.color == "Blue":
+    if st.beta_state.get("color") == "Blue":
         st.info("Blue")
-    if state.color == "Yellow":
+    if st.beta_state.get("color") == "Yellow":
         st.warning("Yellow")
 
 

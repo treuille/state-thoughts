@@ -2,6 +2,7 @@ import streamlit as st
 import linked_sliders
 import non_trivial_init
 import reacting_at_the_bottom
+import widget_value
 import inspect
 import re
 import textwrap
@@ -23,6 +24,7 @@ def main():
         "Linked sliders": linked_sliders,
         "Non-trivial state initialization": non_trivial_init,
         "Reacting to events at the bottom": reacting_at_the_bottom,
+        "Widget state in callbacks": widget_value,
     }
     options = ["Summary"] + list(examples.keys())
     selected_page = st.sidebar.radio("Select page", options)
