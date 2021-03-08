@@ -4,6 +4,14 @@ A writeup of my thoughts on the current state model
 
 ## Todo
 
+- Go through all the examples using `beta_state`
+- See if I can create a second linked slides example with callbacks
+- Write up a theory of how state should be handled in Streamlit
+- Write up a process for how to turn these learnings into new prototypes
+- Clean up everything below
+
+### Everything below
+
 - Then put together the second example
 - Look for more examples from the state example
 - Write up my notes on why I did what I did
@@ -22,7 +30,6 @@ A writeup of my thoughts on the current state model
 
 ## Examples
 
-- Non-trivial state initialization
 - Errors before and after 
 - closures
 - sliders that re-initialize the state

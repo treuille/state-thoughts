@@ -9,7 +9,6 @@ This is an example where we're trying to initialize the state properly
 """
 
 import streamlit as st
-import st_event
 
 def example_with_callbacks():
     """
