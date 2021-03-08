@@ -101,17 +101,15 @@ def example_with_signals():
         f = st.beta_signal_value()
         c = to_celcius(f)
     else:
-        # beta_widget_value doesn't return what I expected, so these are differently named to
-        # empahsize that this part is imaginary
-        c = st.previous_widget_value('c')
-        f = st.previous_widget_value('f')
+        c = st.beta_widget_value('c')
+        f = st.beta_widget_value('f')
 
     # Now actually display the sliders
     celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, signal="Celsius", key='c')
-    celsius.value = c
+    # celsius.value = c
     fahrenheit = st.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
                            to_fahrenheit(MAX_CELCIUS), signal="Fahrenheit", key='f')
-    fahrenheit.value = f
+    # fahrenheit.value = f
 
     st.write(f"`{celsius}`c == `{fahrenheit}`f")
 
