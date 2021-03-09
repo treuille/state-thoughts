@@ -16,21 +16,23 @@ PROTOTYPES = {
     "beta_state": "example_with_beta_state",
 }
 
+# Each prototype is tested on a number of examples, listed here.
+EXAMPLES = {
+    "Linked sliders": linked_sliders,
+    "Non-trivial state initialization": non_trivial_init,
+    "Reacting to events at the bottom": reacting_at_the_bottom,
+}
+
 def main():
     """Exection starts here."""
     # Setup the main navigation in the sidebar
-    examples = {
-        "Linked sliders": linked_sliders,
-        "Non-trivial state initialization": non_trivial_init,
-        "Reacting to events at the bottom": reacting_at_the_bottom,
-    }
-    options = ["Summary"] + list(examples.keys())
+    options = ["Summary"] + list(EXAMPLES.keys())
     selected_page = st.sidebar.radio("Select page", options)
 
     if selected_page == "Summary":
         display_summary()
-    elif selected_page in examples:
-        display_example(examples[selected_page])
+    elif selected_page in EXAMPLES:
+        display_example(EXAMPLES[selected_page])
 
 
 def display_summary():
@@ -98,3 +100,9 @@ def display_function_code(func):
 
 if __name__ == "__main__":
     main()
+    main()
+    EXAMPLES = {
+        "Linked sliders": linked_sliders,
+        "Non-trivial state initialization": non_trivial_init,
+        "Reacting to events at the bottom": reacting_at_the_bottom,
+    }
