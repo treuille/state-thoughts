@@ -68,11 +68,9 @@ def example_with_callbacks():
 
     st.write(f"`{celsius}c` == `{fahrenheit}f`")
 
-
 def example_with_signals():
     """
     - consider something like DONT_CHANGE for linked sliders
-
     - One thing that's kinda complicated about this example is that it's 
       kinda weird how you're juggling these two pieces of state (fahrenheit and
       celsius) in a tricky way.
@@ -102,3 +100,29 @@ def example_with_signals():
     if st.beta_signal("Balloons"):
         st.balloons()
     st.button("Balloons", signal="Balloons")
+
+def example_with_decorators():
+    """
+    - Described as two files to show a separation of UI logic and the business
+      logic. That being said, the callbacks _can_ include business logic.
+    """
+
+    # This could be streamlit_ui.py
+    st.beta_state.init("celsius", -100)
+
+    @st.ui.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, st.beta_state.get("celsius"))
+    def celsius_slider(new_value):
+        st.beta_state.set("celsius", new_value)
+    
+    @st.ui.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
+        to_fahrenheit(MAX_CELCIUS), 
+        to_fahrenheit(st.beta_state.get("celsius")))
+    def fahrenheit_slider(new_value):
+        st.beta_state.set("celsius", to_celcius(new_value))
+  
+
+    # from my_script_ui import celsius_slider, fahrenheit_slider
+    celsius = celsius_slider()
+    fahrenheit = fahrenheit_slider()
+
+    st.write(f"`{celsius}`c == `{fahrenheit}`f")

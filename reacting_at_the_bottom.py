@@ -46,3 +46,14 @@ def example_with_signals():
         st.info("Blue")
     elif st.signal("Yellow"):
         st.warning("Yellow")
+
+def example_with_decorators():
+    """
+    - No decorators needed (really true for all the others?)
+    """
+    blue = st.button("Blue")
+    yellow = st.button("Yellow")
+    if blue:
+        st.info("Blue")
+    elif yellow:
+        st.warning("Yellow")

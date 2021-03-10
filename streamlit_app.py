@@ -14,6 +14,7 @@ PROTOTYPES = {
     "Callbacks": "example_with_callbacks",
     "Signals": "example_with_signals",
     "beta_state": "example_with_beta_state",
+    "Decorators": "example_with_decorators"
 }
 
 # Each prototype is tested on a number of examples, listed here.

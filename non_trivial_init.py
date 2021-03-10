@@ -93,3 +93,51 @@ def example_with_beta_state():
     st.write(st.beta_state.get("data"))
     st.button("Increment data", on_click=increment_data)
     st.button("Reset state", on_click=reset_state)
+
+def example_with_decorators():
+    """
+    - A little more mixed logic, but more modular in nature.
+    - I'm not sure why we need to save rows and cols if we can just
+      look at the size of the data matrix?
+    """
+
+    INITIAL_VALUE = 5
+    def set_data(rows, cols):
+        data = np.zeros((rows, cols), np.int32)
+        for i in range(rows):
+            for j in range(cols):
+                data[i, j] = (i + j) % 2
+        
+        return data
+
+    st.beta_state.init("rows", INITIAL_VALUE)
+    st.beta_state.init("cols", INITIAL_VALUE)
+    st.beta_state.init("data", set_data(INITIAL_VALUE, INITIAL_VALUE))
+    state = st.beta_state.get()
+
+    @st.ui.button("Reset state")
+    def reset_button():
+        # Perhaps just st.beta_state.reset() ?
+        state['rows'] = state['cols'] = INITIAL_VALUE
+        state["data"] = set_data(INITIAL_VALUE, INITIAL_VALUE)
+    
+    @st.ui.button("Increment data")
+    def increment_button():
+        state["data"] += 1
+
+    @st.ui.slider("Rows", 1, 10, state['rows'])
+    def rows_slider(new_rows):
+        state['rows'] = new_rows
+        state["data"] = set_data(new_rows, state['cols'])
+    
+    @st.ui.slider("Columns", 1, 10, state['cols'])
+    def cols_slider(new_cols):
+        state['cols'] = new_cols
+        state["data"] = set_data(state['rows'], new_cols)
+    
+    rows_slider()
+    cols_slider()
+
+    st.write(st.beta_state.get("data"))
+    increment_button()
+    reset_button()
