@@ -21,7 +21,7 @@ def example_naive():
     2. Have a way to add the new item only when the input to the textfield changed
        (-> on_change or signal)
     """
-    # Define initial state with some dummy todos.
+    # Define initial state.
     state = st.beta_session_state(
         todos=[
             {"description": "Join streamlit", "author": "Johannes", "done": True},
@@ -29,39 +29,52 @@ def example_naive():
         ],
     )
 
+    # Show text_input to add new TODO.
     new_todo = st.text_input("What should Johannes do?")
     if new_todo:
         state.todos.append(
             {"description": new_todo, "author": "Johannes", "done": False}
         )
 
+    # Show all TODOs.
     write_todo_list(state.todos)
 
 
 def example_with_callbacks():
     """
-    - **Adrien will write notes and observations here.**
-    """
-    st.write("example_with_callbacks")
+    Let's try this with a callback now.
 
+    **This works!!! 🎉**
+
+    Only two caveats:
+
+    1. If I change the input to the text field and then click somewhere else (without
+       pressing enter!), it still adds the item. But I guess that's a basic limitation
+       of streamlit :/
+    2. I would like to clear the text field after the new item was added (and this could
+       in fact also solve issue 1!). But is this really a state problem, or rather a
+       problem of adding a function to change a widget in retrospect?
+    """
+    # Define initial state.
     state = st.beta_session_state(
-        # new_todo="",
         todos=[
             {"description": "Join streamlit", "author": "Johannes", "done": True},
-            {
-                "description": "Test state prototypes",
-                "author": "Johannes",
-                "done": False,
-            },
+            {"description": "Test state", "author": "Johannes", "done": False},
         ],
     )
 
-    new_todo = st.text_input("What should Johannes do?")
-    if new_todo:
-        state.todos.append(
-            {"description": new_todo, "author": "Johannes", "done": False}
-        )
+    # Define callback when text_input changed.
+    def new_todo_changed(new_todo):
+        if new_todo:
+            print("Added new todo:", new_todo)
+            state.todos.append(
+                {"description": new_todo, "author": "Johannes", "done": False}
+            )
 
+    # Show text_input to add new TODO.
+    new_todo = st.text_input("What should Johannes do?", on_change=new_todo_changed)
+
+    # Show all TODOs.
     write_todo_list(state.todos)
 
 
