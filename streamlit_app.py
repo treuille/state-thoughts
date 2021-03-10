@@ -100,9 +100,3 @@ def display_function_code(func):
 
 if __name__ == "__main__":
     main()
-    main()
-    EXAMPLES = {
-        "Linked sliders": linked_sliders,
-        "Non-trivial state initialization": non_trivial_init,
-        "Reacting to events at the bottom": reacting_at_the_bottom,
-    }
