@@ -2,6 +2,7 @@ import streamlit as st
 import linked_sliders
 import non_trivial_init
 import reacting_at_the_bottom
+import johannes_todo_list
 import inspect
 import re
 import textwrap
@@ -11,6 +12,7 @@ import textwrap
 # on that eample. For example the the code implementing the signals prototype on
 # the linked sliders example is called linked_sliders.example_with_signals().
 PROTOTYPES = {
+    "Naive Code Execution 🥺": "example_naive",
     "Callbacks": "example_with_callbacks",
     "Signals": "example_with_signals",
     "beta_state": "example_with_beta_state",
@@ -18,10 +20,12 @@ PROTOTYPES = {
 
 # Each prototype is tested on a number of examples, listed here.
 EXAMPLES = {
+    "Johannes' TODO List": johannes_todo_list,
     "Linked sliders": linked_sliders,
     "Non-trivial state initialization": non_trivial_init,
     "Reacting to events at the bottom": reacting_at_the_bottom,
 }
+
 
 def main():
     """Exection starts here."""
@@ -61,8 +65,9 @@ def display_summary():
 def display_example(example):
     """Show how an example works with differnet code snippets."""
     # This is the set of prototypes which are defined in this example module
-    valid_prototypes = [name for name, func_name in PROTOTYPES.items()
-            if hasattr(example, func_name)]
+    valid_prototypes = [
+        name for name, func_name in PROTOTYPES.items() if hasattr(example, func_name)
+    ]
 
     prototype_name = st.sidebar.radio("Example type", valid_prototypes)
     func = getattr(example, PROTOTYPES[prototype_name])
@@ -100,7 +105,7 @@ def display_function_code(func):
 
 if __name__ == "__main__":
     main()
-    main()
+    # main()
     EXAMPLES = {
         "Linked sliders": linked_sliders,
         "Non-trivial state initialization": non_trivial_init,
