@@ -42,18 +42,20 @@ def example_naive():
 
 def example_with_callbacks():
     """
-    Let's try this with a callback now.
+    Let's try this with a callback now. I also added an author selector to see how it
+    works with multiple widgets.
 
-    **This works!!! 🎉**
+    **First of all: This works!!! 🎉**
 
-    Only two caveats:
+    Two issues:
 
-    1. If I change the input to the text field and then click somewhere else (without
-       pressing enter!), it still adds the item. But I guess that's a basic limitation
-       of streamlit :/
-    2. I would like to clear the text field after the new item was added (and this could
-       in fact also solve issue 1!). But is this really a state problem, or rather a
-       problem of adding a function to change a widget in retrospect?
+    1. **[Major]** I don't like the way I need to get the value of the author selector
+       via `st.beta_widget_value` within the callback. Feels a bit unnatural
+       (especially as the value of the text_input is passed to the callback).
+    2. **[Minor]** I would like to clear the text_input after the new item was added
+       Not really a state problem, but maybe we should add a function to set a widget's
+       value (which would also be really useful for other use cases, e.g. if you want
+       to set the value of a widget based on another widget further down!).
     """
     # Define initial state.
     state = st.beta_session_state(
@@ -66,12 +68,25 @@ def example_with_callbacks():
     # Define callback when text_input changed.
     def new_todo_changed(new_todo):
         if new_todo:
-            print("Added new todo:", new_todo)
+            print("Adding new todo:", new_todo)
             state.todos.append(
-                {"description": new_todo, "author": "Johannes", "done": False}
+                {
+                    "description": new_todo,
+                    "author": st.beta_widget_value("author"),
+                    "done": False,
+                }
             )
 
-    # Show text_input to add new TODO.
+    # Show widgets to add new TODO.
+    st.write(
+        "<style>.main * div.row-widget.stRadio > div{flex-direction:row;}</style>",
+        unsafe_allow_html=True,
+    )
+    author = st.radio(
+        "Who are you?",
+        ["Johannes", "Adrien", "Thiago", "Abhi", "Ken", "Amanda"],
+        key="author",
+    )
     new_todo = st.text_input("What should Johannes do?", on_change=new_todo_changed)
 
     # Show all TODOs.
