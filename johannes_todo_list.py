@@ -132,6 +132,14 @@ def example_with_signals():
     write_todo_list(state.todos)
 
 
+def example_with_widget_changed():
+    """
+    This example uses Amanda's new `widget_changed` prototype (see
+    [here](https://streamlit.slack.com/archives/C01DRL2AGRE/p1615400957072800)).
+    """
+    st.write("blub")
+
+
 def write_todo_list(todos):
     "Display the todo list (mostly layout stuff, no state)."
     st.write("---")
