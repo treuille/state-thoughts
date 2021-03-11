@@ -3,6 +3,7 @@ import linked_sliders
 import non_trivial_init
 import reacting_at_the_bottom
 import johannes_todo_list
+import johannes_minimal_analytics
 import inspect
 import re
 import textwrap
@@ -21,10 +22,11 @@ PROTOTYPES = {
 
 # Each prototype is tested on a number of examples, listed here.
 EXAMPLES = {
-    "Johannes' TODO List": johannes_todo_list,
     "Linked sliders": linked_sliders,
     "Non-trivial state initialization": non_trivial_init,
     "Reacting to events at the bottom": reacting_at_the_bottom,
+    "[Johannes] TODO List": johannes_todo_list,
+    "[Johannes] Minimal Analytics": johannes_minimal_analytics,
 }
 
 

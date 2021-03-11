@@ -1,5 +1,5 @@
 """
-# 🧑‍💻 Johannes' TODO list
+# 🧑‍💻 [Johannes] TODO list
 
 This is a simple TODO list which stores the TODO items in session state (each item is 
 one `dict`). 
