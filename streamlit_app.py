@@ -3,6 +3,7 @@ import linked_sliders
 import non_trivial_init
 import annotation
 import tic_tac
+import url_params
 import inspect
 import re
 import textwrap
@@ -15,7 +16,8 @@ def main():
         "Linked sliders": linked_sliders,
         "Non-trivial state initialization": non_trivial_init,
         "Annotation": annotation,
-        "Tic Tac Toe": tic_tac
+        "Tic Tac Toe": tic_tac,
+        "URL Params": url_params
     }
     options = ["Summary"] + list(examples.keys())
     selected_page = st.sidebar.radio("Select page", options)
