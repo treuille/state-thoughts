@@ -95,9 +95,41 @@ def example_with_callbacks():
 
 def example_with_signals():
     """
-    - **Adrien will write notes and observations here.**
+    Signal version (using the existing syntax with `st.beta_signal`).
+
+    - Works pretty well and seems more lightweight than using callbacks
+      (especially because you don't need `st.beta_widget_value` to get the value of
+      another widget, as with callbacks)
+    - One additional concept to wrap your head around
+    - I think using `st.widget_changed` (as in Amanda's latest prototype) instead of
+      signal would be really great here!
     """
-    st.write("example_with_signals")
+    # Define initial state.
+    state = st.beta_session_state(
+        todos=[
+            {"description": "Join streamlit", "author": "Johannes", "done": True},
+            {"description": "Test state", "author": "Johannes", "done": False},
+        ],
+    )
+
+    # Show widgets to add new TODO.
+    st.write(
+        "<style>.main * div.row-widget.stRadio > div{flex-direction:row;}</style>",
+        unsafe_allow_html=True,
+    )
+    author = st.radio(
+        "Who are you?",
+        ["Johannes", "Adrien", "Thiago", "Abhi", "Ken", "Amanda"],
+    )
+    new_todo = st.text_input("What should Johannes do?", signal="new_todo_changed")
+
+    # Listen to signal and add new TODO.
+    if st.beta_signal("new_todo_changed"):
+        print("Adding new todo:", new_todo)
+        state.todos.append({"description": new_todo, "author": author, "done": False})
+
+    # Show all TODOs.
+    write_todo_list(state.todos)
 
 
 def write_todo_list(todos):
