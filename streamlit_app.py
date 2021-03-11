@@ -2,9 +2,11 @@ import streamlit as st
 import linked_sliders
 import non_trivial_init
 import annotation
+import tic_tac
 import inspect
 import re
 import textwrap
+
 
 def main():
     """Exection starts here."""
@@ -12,7 +14,8 @@ def main():
     examples = {
         "Linked sliders": linked_sliders,
         "Non-trivial state initialization": non_trivial_init,
-        "Annotation": annotation
+        "Annotation": annotation,
+        "Tic Tac Toe": tic_tac
     }
     options = ["Summary"] + list(examples.keys())
     selected_page = st.sidebar.radio("Select page", options)
@@ -21,6 +24,7 @@ def main():
         display_summary()
     elif selected_page in examples:
         display_example(examples[selected_page])
+
 
 def display_summary():
     """Display the summary information."""
@@ -39,6 +43,7 @@ def display_summary():
     """
     for func in new_funcs:
         st.write(f"### `{func}`", getattr(st, func))
+
 
 def display_example(example):
     """Show how an example works with differnet code snippets."""
@@ -67,6 +72,7 @@ def display_example(example):
     f"## {example_name} Notes"
     func.__doc__
 
+
 def display_function_code(func):
     """Displays the code of a function, stripping out the defintion and
     docstring."""
@@ -80,6 +86,7 @@ def display_function_code(func):
 
     # Display it
     st.code(source)
+
 
 if __name__ == "__main__":
     main()
