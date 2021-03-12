@@ -4,6 +4,7 @@ import non_trivial_init
 import reacting_at_the_bottom
 import johannes_todo_list
 import johannes_minimal_analytics
+import johannes_tic_tac_toe
 import inspect
 import re
 import textwrap
@@ -27,6 +28,7 @@ EXAMPLES = {
     "Reacting to events at the bottom": reacting_at_the_bottom,
     "[Johannes] TODO List": johannes_todo_list,
     "[Johannes] Minimal Analytics": johannes_minimal_analytics,
+    "[Johannes] Not another tic tac toe": johannes_tic_tac_toe
 }
 
 
