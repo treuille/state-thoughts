@@ -136,6 +136,8 @@ def example_with_widget_changed():
     """
     This example uses Amanda's new `widget_changed` prototype (see
     [here](https://streamlit.slack.com/archives/C01DRL2AGRE/p1615400957072800)).
+    
+    ** ⚠ This doesn't work yet!!**
     """
     # Define initial state.
     state = st.get_state(
