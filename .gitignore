@@ -1,1 +1,3 @@
 .vim/.ropeproject
+__pycache__
+.vscode
