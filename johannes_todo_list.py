@@ -137,7 +137,34 @@ def example_with_widget_changed():
     This example uses Amanda's new `widget_changed` prototype (see
     [here](https://streamlit.slack.com/archives/C01DRL2AGRE/p1615400957072800)).
     """
-    st.write("blub")
+    # Define initial state.
+    state = st.get_state(
+        todos=[
+            {"description": "Join streamlit", "author": "Johannes", "done": True},
+            {"description": "Test state", "author": "Johannes", "done": False},
+        ],
+    )
+
+    # Show widgets to add new TODO.
+    st.write(
+        "<style>.main * div.row-widget.stRadio > div{flex-direction:row;}</style>",
+        unsafe_allow_html=True,
+    )
+    author = st.radio(
+        "Who are you?",
+        ["Johannes", "Adrien", "Thiago", "Abhi", "Ken", "Amanda"],
+        key="author",
+    )
+    new_todo = st.text_input("What should Johannes do?", key="new_todo_changed")
+
+    # Listen to signal and add new TODO.
+    if st.widget_changed("new_todo_changed"):
+        print("Adding new todo:", new_todo)
+        state["b"] = 123
+        # state.todos.append({"description": new_todo, "author": author, "done": False})
+
+    # Show all TODOs.
+    #write_todo_list(state.todos)
 
 
 def write_todo_list(todos):
