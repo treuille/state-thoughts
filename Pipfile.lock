@@ -848,8 +848,8 @@
         "streamlit": {
             "hashes": [
                 "sha256:0c358fbfc4973b4008df4a77193323154d27673024c8ef4601b778785be6e86f",
-                "sha256:47173b2273986a12efdc1f54d71a9b3922712d0705b50f99124a48e7d3484b01",
-                "sha256:e2209a878417a2416bb4a1bca37306490d15380f9d46b06ae8ef79e3dfd7308a"
+                "sha256:e2209a878417a2416bb4a1bca37306490d15380f9d46b06ae8ef79e3dfd7308a",
+                "sha256:ed151a423fd23cd9d6cd3cf40f6d59a76b67488f1f8b27f22a71f2f52743514b"
             ],
             "path": "./streamlit-0.76.0-py2.py3-none-any.whl",
             "version": "==0.76.0"
