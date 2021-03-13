@@ -18,13 +18,15 @@ def example_with_callbacks():
     """
     # Get and initialize the state.
     state = st.get_state()
-    st.beta_state.init("temperature_celsius", MIN_CELCIUS)
+    state.temperature_celsius = MIN_CELCIUS
 
     # Callbacks if something changes
     def celsius_changed(new_celsius_temperature):
+        st.write("new_celsius_temperature:", new_celsius_temperature)
         state.temperature_celsius = new_celsius_temperature
 
     def fahrenheit_changed(new_fahrenheit_temperature):
+        st.write("new_fahrenheit_temperature:", new_fahrenheit_temperature)
         state.temperature_celsius = to_celsius(new_fahrenheit_temperature)
 
     celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS,
