@@ -41,11 +41,8 @@ def example_with_callbacks():
 
 def example_with_signals():
     """
-    - consider something like DONT_CHANGE for linked sliders
-
-    - One thing that's kinda complicated about this example is that it's 
-      kinda weird how you're juggling these two pieces of state (fahrenheit and
-      celsius) in a tricky way.
+    I think this example is nice and clean, but it does **require putting the
+    signal handling above the 
     """
     # Get the state
     state = st.get_state()
@@ -54,47 +51,43 @@ def example_with_signals():
     min_fahrenheit = to_fahrenheit(MIN_CELCIUS)
     max_fahrenheit = to_fahrenheit(MAX_CELCIUS)
 
-    # Show the old state
-    st.write("**Before signals**")
-    st.write(f"celcius: `{state.celsius}`c")
-    st.write(f"fahrenheit: `{state.fahrenheit}`f")
-
     # React to any changes up here
     if st.widget_changed("celsius"):
-        st.error("celsius changed")
         state.fahrenheit = to_fahrenheit(state.celsius)
     elif st.widget_changed("fahrenheit"):
-        st.error("fahrenheit changed")
         state.celsius = to_celsius(state.fahrenheit)
-    else:
-        st.success("nothing changed")
-
-    st.write("**After signals**")
-    st.write(f"celcius: `{state.celsius}`c")
-    st.write(f"fahrenheit: `{state.fahrenheit}`f")
 
     # Now actually display the sliders
     st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, key="celsius")
     st.slider("Fahrenheit", min_fahrenheit, max_fahrenheit, key="fahrenheit")
 
-    # Show the new state
-    st.write("**After signals**")
-    st.write(f"celcius: `{state.celsius}`c")
-    st.write(f"fahrenheit: `{state.fahrenheit}`f")
+    # Show the result
+    st.write(f"`{state.celsius}`c == `{state.fahrenheit}`f")
+
 
 def example_with_decorators():
     """
     Linked sliders with decorators.
     """
-    # This could be streamlit_ui.py
-    st.beta_state.init("celsius", MIN_CELCIUS)
+    # Get and initialize the state
+    state = st.get_state()
+    if state.celsius == None:
+        state.celsius = MIN_CELCIUS
 
-    @st.ui.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, st.state.celsius)
+    # Display the state in some debug code
+    st.write("state", type(state), state)
+
+    # # This could be streamlit_ui.py
+    # st.write(st.get_state)
+    # st.write(st.session_state.init)
+    # return
+
+    @st.ui.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, state.celsius)
     def celsius_slider(new_value):
         # can use context here
-        st.beta_state.set("celsius", new_value)
+        state.celsius = new_value
         
-    # @st.ui.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),s
+    # # @st.ui.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),s
 
-    answer = celsius_slider()
-    st.write("answer:", answer)
+    # answer = celsius_slider()
+    # st.write("answer:", answer)
