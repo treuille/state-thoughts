@@ -2,21 +2,6 @@
 # Linked Sliders
 
 Here we are trying to get two sliders to be linked together.
-
-## Notes
-
-- I think it's important to prefer state in the widget than in the state
-  object, and to avoid duplicating the state between the wiget and the
-  state object.
-
-- It's a little bit awkward how the handling of the signals is happening
-  above the definition of the GUI events
-
-- This live reloading thing with state is just absolutely amazing from 
-  a workflow perspective.
-
-- Note that launching the balloons resets the sliders. I think we need to
-  consider something like DONT_CHANGE for linked sliders.
 """
 
 import streamlit as st
@@ -29,28 +14,11 @@ MIN_CELCIUS, MAX_CELCIUS = -100.0, 100.0
 
 def example_with_callbacks():
     """
-    - I had to reset the state in this complex way because I wasn't sure where
-      else the state may have been used. :(
-
-    - In a way, I find this example simpler to understand than the example 
-      with signals, because it's more obvious how it works
-      
-    - One thing I don't like about this is that it feels like the state is
-      "taking over" and the Streamlit dataflow style is becoming a detail.
-      I feel like there's a way of marrying them more closely.
-
-    - This example failed for me:
-      ```py
-      state = st.beta_session_state() 
-      if 'temperature_celsius' not in dir(state):
-          state.temperature_celsius = MIN_CELCIUS
-      ```
-      With the following message: *StreamlitAPIException: Session state
-      variable has not been initialized: "temperature_celsius"*. Is this really
-      what we want??
+    Linked sliders with callbacks.
     """
     # Get and initialize the state.
-    state = st.beta_session_state(temperature_celsius=MIN_CELCIUS) 
+    state = st.get_state()
+    st.beta_state.init("temperature_celsius", MIN_CELCIUS)
 
     # Callbacks if something changes
     def celsius_changed(new_celsius_temperature):
@@ -85,7 +53,9 @@ def example_with_signals():
     max_fahrenheit = to_fahrenheit(MAX_CELCIUS)
 
     # Show the old state
-    st.write(f"`{state.celsius}`c == `{state.fahrenheit}`f")
+    st.write("**Before signals**")
+    st.write(f"celcius: `{state.celsius}`c")
+    st.write(f"fahrenheit: `{state.fahrenheit}`f")
 
     # React to any changes up here
     if st.widget_changed("celsius"):
@@ -97,10 +67,32 @@ def example_with_signals():
     else:
         st.success("nothing changed")
 
+    st.write("**After signals**")
+    st.write(f"celcius: `{state.celsius}`c")
+    st.write(f"fahrenheit: `{state.fahrenheit}`f")
+
     # Now actually display the sliders
     st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, key="celsius")
     st.slider("Fahrenheit", min_fahrenheit, max_fahrenheit, key="fahrenheit")
 
     # Show the new state
-    st.write(f"`{state.celsius}`c == `{state.fahrenheit}`f")
+    st.write("**After signals**")
+    st.write(f"celcius: `{state.celsius}`c")
+    st.write(f"fahrenheit: `{state.fahrenheit}`f")
 
+def example_with_decorators():
+    """
+    Linked sliders with decorators.
+    """
+    # This could be streamlit_ui.py
+    st.beta_state.init("celsius", MIN_CELCIUS)
+
+    @st.ui.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, st.state.celsius)
+    def celsius_slider(new_value):
+        # can use context here
+        st.beta_state.set("celsius", new_value)
+        
+    # @st.ui.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),s
+
+    answer = celsius_slider()
+    st.write("answer:", answer)
