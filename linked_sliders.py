@@ -14,35 +14,42 @@ MIN_CELCIUS, MAX_CELCIUS = -100.0, 100.0
 
 def example_with_callbacks():
     """
-    Linked sliders with callbacks.
+    - Linked sliders with callbacks.
+    - Only a single state value.
+    - Setting the slider values by passing in the `value` parameter.
     """
     # Get and initialize the state.
     state = st.get_state()
-    state.temperature_celsius = MIN_CELCIUS
+    if state.celsius == None:
+        state.celsius = MIN_CELCIUS
 
     # Callbacks if something changes
     def celsius_changed(new_celsius_temperature):
-        st.write("new_celsius_temperature:", new_celsius_temperature)
-        state.temperature_celsius = new_celsius_temperature
+        state.celsius = new_celsius_temperature
 
     def fahrenheit_changed(new_fahrenheit_temperature):
-        st.write("new_fahrenheit_temperature:", new_fahrenheit_temperature)
-        state.temperature_celsius = to_celsius(new_fahrenheit_temperature)
+        state.celsius = to_celsius(new_fahrenheit_temperature)
 
-    celsius = st.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS,
-            state.temperature_celsius, on_change=celsius_changed)
-    fahrenheit = st.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),
-            to_fahrenheit(MAX_CELCIUS), 
-            to_fahrenheit(state.temperature_celsius),
+    # Display the sliders.
+    st.slider("Celsius",
+            min_value=MIN_CELCIUS,
+            max_value=MAX_CELCIUS,
+            value=state.celsius,
+            on_change=celsius_changed)
+    st.slider("Fahrenheit",
+            min_value=to_fahrenheit(MIN_CELCIUS),
+            max_value=to_fahrenheit(MAX_CELCIUS), 
+            value=to_fahrenheit(state.celsius),
             on_change=fahrenheit_changed)
 
-    st.write(f"`{celsius}c` == `{fahrenheit}f`")
+    # Display the state.
+    st.success(f"`{state.celsius}c` == `{to_fahrenheit(state.celsius)}f`")
 
 
 def example_with_signals():
     """
-    I think this example is nice and clean, but it does **require putting the
-    signal handling above the 
+    - Linked sliders with signals.
+    - We have two state variables here, `fahrenheit` and `celsius`.
     """
     # Get the state
     state = st.get_state()
@@ -62,7 +69,7 @@ def example_with_signals():
     st.slider("Fahrenheit", min_fahrenheit, max_fahrenheit, key="fahrenheit")
 
     # Show the result
-    st.write(f"`{state.celsius}`c == `{state.fahrenheit}`f")
+    st.success(f"`{state.celsius}`c == `{state.fahrenheit}`f")
 
 
 def example_with_decorators():
