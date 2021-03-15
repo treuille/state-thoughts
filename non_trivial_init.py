@@ -12,20 +12,29 @@ def example_with_callbacks():
     """
     - The use of callbacks here makes it easy to avoid off-by-one errors.
     """
-    rows = st.slider("Rows", 1, 10, 5)
-    cols = st.slider("Columns", 1, 10, 5)
-    state = st.beta_session_state(rows=None, cols=None, data=0)
-    if rows != state.rows or cols != state.cols:
-        state.rows = rows
-        state.cols = cols
+    # Setup the state properly
+    state = st.get_state()
+    if state.rows is None or state.cols is None:
+        state.rows = state.cols = 5
+
+    # Display the sliders
+    st.slider("Rows", 1, 10, key="rows")
+    st.slider("Columns", 1, 10, key="cols")
+
+    # Reintialize the staste if necessary
+    if state.data is None or state.data.shape != (state.rows, state.cols):
         state.data = np.zeros((state.rows, state.cols), np.int32)
-        for i in range(rows):
-            for j in range(cols):
+        for i in range(state.rows):
+            for j in range(state.cols):
                 state.data[i, j] = (i + j) % 2
+
+    # Callbacks
     def increment_data():
         state.data += 1
     def reset_state():
-        state.rows = state.cols = None
+        state.data = None
+
+    # Display the ui
     st.write(state.data)
     st.button("Increment data", on_click=increment_data)
     st.button("Reset state", on_click=reset_state)
@@ -37,23 +46,32 @@ def example_with_signals():
       statements a bit earlier in the code logic. **So order of operations
       became more important.**
     """
-    rows = st.slider("Rows", 1, 10, 5)
-    cols = st.slider("Columns", 1, 10, 5)
-    state = st.beta_session_state(rows=None, cols=None, data=0)
-    if st.beta_signal("Increment data"):
+    # Setup the state properly
+    state = st.get_state()
+    if state.rows is None or state.cols is None:
+        state.rows = state.cols = 5
+
+    # Display the sliders
+    st.slider("Rows", 1, 10, key="rows")
+    st.slider("Columns", 1, 10, key="cols")
+
+    # Change handling
+    if st.widget_changed("increment_data"):
         state.data += 1
-    elif st.beta_signal("Reset state"):
-        state.rows = state.cols = None
-    if rows != state.rows or cols != state.cols:
-        state.rows = rows
-        state.cols = cols
+    elif st.widget_changed("reset_state"):
+        state.data = None
+
+    # Reintialize the staste if necessary
+    if state.data is None or state.data.shape != (state.rows, state.cols):
         state.data = np.zeros((state.rows, state.cols), np.int32)
-        for i in range(rows):
-            for j in range(cols):
+        for i in range(state.rows):
+            for j in range(state.cols):
                 state.data[i, j] = (i + j) % 2
+
     st.write(state.data)
-    st.button("Increment", signal="Increment data")
-    st.button("Reset", signal="Reset state")
+    st.button("Increment", key="increment_data")
+    st.button("Reset", key="reset_state")
+
 
 def example_with_beta_state():
     """
