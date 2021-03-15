@@ -89,41 +89,6 @@ def display_summary():
         columns=['prototype', 'function'])
     st.table(examples)
 
-    example_markdown = """
-    # A title
-    
-    Some text
-
-    1. A numbered list
-    2. A numbered list
-
-    Some more text
-
-    * A bulletted list
-    * A bulletted list
-    """
-    st.code(example_markdown, language="markdown")
-    st.write(example_markdown)
-        
-    # # These are the new functions that have been added to this wheel
-    # new_funcs = [
-    #     "beta_widget_value",
-    #     "beta_widget_value",
-    #     "beta_signal",
-    #     "beta_signal_value",
-    #     "beta_signal_context",
-    # ]
-
-    # """
-    # # State Tests
-    # Here are the new functions that are defined in this module
-    # """
-    # for func in new_funcs:
-    #     st.write(f"### `{func}`", getattr(st, func))
-
-    # # Also writ the beta_state.init function
-    # st.write("### `beta_state.init`", st.beta_state.init)
-
 
 def display_example(example):
     """Show how an example works with differnet code snippets."""
