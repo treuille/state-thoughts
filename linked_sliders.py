@@ -81,20 +81,36 @@ def example_with_decorators():
     if state.celsius == None:
         state.celsius = MIN_CELCIUS
 
+    # Convert the range bounds to fahrenheit.
+    min_fahrenheit = to_fahrenheit(MIN_CELCIUS)
+    max_fahrenheit = to_fahrenheit(MAX_CELCIUS)
+
     # Display the state in some debug code
     st.write("state", type(state), state)
 
-    # # This could be streamlit_ui.py
-    # st.write(st.get_state)
-    # st.write(st.session_state.init)
-    # return
-
     @st.ui.slider("Celsius", MIN_CELCIUS, MAX_CELCIUS, state.celsius)
-    def celsius_slider(new_value):
-        # can use context here
-        state.celsius = new_value
+    def celsius_slider(celsius):
+        st.warning("celsius_slider callback")
+        state.celsius = celsius
+        state.fahrenheit = to_fahrenheit(celsius)
         
-    # # @st.ui.slider("Fahrenheit", to_fahrenheit(MIN_CELCIUS),s
+    @st.ui.slider("Fahrenheit", min_fahrenheit, max_fahrenheit, state.fahrenheit)
+    def fahrenheit_slider(fahrenheit):
+        st.warning("fahrenheit_slider callback")
+        state.fahrenheit = fahrenheit
+        state.celsius = to_celsius(fahrenheit)
+        
+    celsius_slider()
+    fahrenheit_slider()
 
-    # answer = celsius_slider()
-    # st.write("answer:", answer)
+    # Show the result
+    st.success(f"`{state.celsius}` c == `{state.fahrenheit}` f")
+
+def _fancy_slider(label, **slider_kwargs):
+    def decorator(callback):
+        st.write(callback)
+
+def example_with_decorators_2():
+    """
+    - This is an alternate decorator style
+    """  
