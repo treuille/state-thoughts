@@ -16,6 +16,7 @@ PROTOTYPES = {
     "Signals": "example_with_signals",
     "beta_state": "example_with_beta_state",
     "Decorator Style": "example_with_decorators",
+    "Second Decorator Style": "example_with_decorators_2",
 }
 
 # Each prototype is tested on a number of examples, listed here.

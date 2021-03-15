@@ -108,9 +108,38 @@ def example_with_decorators():
 
 def _fancy_slider(label, **slider_kwargs):
     def decorator(callback):
-        st.write(callback)
+        return st.slider(label, key=callback.__name__, on_change=callback,
+                **slider_kwargs)
+    return decorator
 
 def example_with_decorators_2():
     """
     - This is an alternate decorator style
     """  
+    # Convert the range bounds to fahrenheit.
+    min_fahrenheit = to_fahrenheit(MIN_CELCIUS)
+    max_fahrenheit = to_fahrenheit(MAX_CELCIUS)
+
+    # Get and initialize the state
+    state = st.get_state()
+    if state.celsius == None or state.fahrenheit == None:
+        state.celsius = MIN_CELCIUS
+        state.fahrenheit = min_fahrenheit
+
+    @_fancy_slider("Celsius",
+        min_value=MIN_CELCIUS,
+        max_value=MAX_CELCIUS)
+    def celsius(value):
+        st.warning(f"celsius: `{value}`")
+        state.celsius = value
+        state.fahrenheit = to_fahrenheit(state.celsius)
+
+    @_fancy_slider("Fahrenheit",
+        min_value=min_fahrenheit,
+        max_value=max_fahrenheit)
+    def fahrenheit(value):
+        st.warning(f"fahrenheit: `{value}`")
+        state.fahrenheit = value
+        state.celsius = to_celsius(state.fahrenheit)
+
+    st.write(state)
