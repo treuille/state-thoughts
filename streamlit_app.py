@@ -5,6 +5,7 @@ import reacting_at_the_bottom
 import inspect
 import re
 import textwrap
+import pandas as pd
 
 # This is the list of prototypes which we're testing, mapped to the name of
 # the function in the example module which demonstrates that prototype
@@ -28,7 +29,7 @@ def main():
     """Exection starts here."""
     # Setup the main navigation in the sidebar
     options = ["Summary"] + list(EXAMPLES.keys())
-    selected_page = st.sidebar.radio("Select page", options)
+    selected_page = st.sidebar.radio("Select an example", options)
 
     if selected_page == "Summary":
         display_summary()
@@ -39,24 +40,89 @@ def main():
 def display_summary():
     """Display the summary information."""
 
-    # These are the new functions that have been added to this wheel
-    new_funcs = [
-        "beta_widget_value",
-        "beta_widget_value",
-        "beta_signal",
-        "beta_signal_value",
-        "beta_signal_context",
-    ]
+    # Instructions
+    st.write("# State tests")
+    st.success("👈 Choose an example at left to explore implementations.")
 
-    """
-    # State Tests
-    Here are the new functions that are defined in this module
-    """
-    for func in new_funcs:
-        st.write(f"### `{func}`", getattr(st, func))
+    # Code layout
+    st.write("""
+    ## Code Layout
+    There are two basic concepts:
+    
+    1. An **example** is a model use case for which we're testing different
+    state models. Each example is defined in a **module**.
+    2. A **prototype** is a Python API which we might publish to the community.
+    Each prototype is defined in a **function**.
 
-    # Also writ the beta_state.init function
-    st.write("### `beta_state.init`", st.beta_state.init)
+    For example, the function `linked_sliders.example_with_callbacks()`
+    provides a snippet of code exemplifying writing two linked sliders in the
+    callback style.
+    """)
+
+    # Show how to write some examples
+    st.write("""
+    ## How to add new examples
+
+    1. Add a new Python module to this repo.
+    2. Add that modele to the `EXAMPLES` table.
+    3. Populate it with prototype functions.
+
+    Currently supported examples:
+    """)
+
+    examples = pd.DataFrame(EXAMPLES.items(),
+        columns=['example', 'module'])
+    st.table(examples)
+
+    # Show how to write prototypes
+    st.write("""
+    ## How to add new prototypes
+
+    1. Add a new prototype name to the `PROTOTYPES` table.
+    2. Implement the corresponding functions in whatever example modules you
+       like.
+
+    Currently supported prototypes:
+    """)
+
+    examples = pd.DataFrame(PROTOTYPES.items(),
+        columns=['prototype', 'function'])
+    st.table(examples)
+
+    example_markdown = """
+    # A title
+    
+    Some text
+
+    1. A numbered list
+    2. A numbered list
+
+    Some more text
+
+    * A bulletted list
+    * A bulletted list
+    """
+    st.code(example_markdown, language="markdown")
+    st.write(example_markdown)
+        
+    # # These are the new functions that have been added to this wheel
+    # new_funcs = [
+    #     "beta_widget_value",
+    #     "beta_widget_value",
+    #     "beta_signal",
+    #     "beta_signal_value",
+    #     "beta_signal_context",
+    # ]
+
+    # """
+    # # State Tests
+    # Here are the new functions that are defined in this module
+    # """
+    # for func in new_funcs:
+    #     st.write(f"### `{func}`", getattr(st, func))
+
+    # # Also writ the beta_state.init function
+    # st.write("### `beta_state.init`", st.beta_state.init)
 
 
 def display_example(example):
@@ -65,7 +131,7 @@ def display_example(example):
     valid_prototypes = [name for name, func_name in PROTOTYPES.items()
             if hasattr(example, func_name)]
 
-    prototype_name = st.sidebar.radio("Example type", valid_prototypes)
+    prototype_name = st.sidebar.radio("Example a prototype", valid_prototypes)
     func = getattr(example, PROTOTYPES[prototype_name])
 
     # Display the title
