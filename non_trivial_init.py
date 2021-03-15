@@ -73,41 +73,39 @@ def example_with_signals():
     st.button("Reset", key="reset_state")
 
 
-def example_with_beta_state():
+def example_with_decorators():
     """
-    - Mostly, my main reaction is that the dictionary notation is so ugly that
-      I'm finding myself playing tricks to avoid using it. I think that given
-      the keys have to be strings, we could just use Python properties to make
-      this a little prettier
-
-    - This init thing is way too verbose. What "wants" to happen is a
-      unification of widgets and state into a single dictionary.
-
-    - We could eventually have a namespace stack, but I really wonder whether
-      that's P0 actually. (To me, namespaces would happen using a context
-      manager.)
-
-    - Therefore, the "key" is actually just the name for the variable
+    - Non-trivial state initialization using Ken's decorator style
+    - I wish I could write multiple dimension sliders, but they keys the keys
+      need to be set indepdentently, which isn't currently supported.
     """
-    rows = st.slider("Rows", 1, 10, 5)
-    cols = st.slider("Columns", 1, 10, 5)
-    st.beta_state.init("rows", None)
-    st.beta_state.init("cols", None)
-    st.beta_state.init("data", None)
-    state = st.beta_state.get()
-    st.write("state", type(state), state)
-    if rows != state["rows"] or cols != state["cols"]:
-        state["rows"] = rows
-        state["cols"] = cols
-        data = np.zeros((rows, cols), np.int32)
-        for i in range(rows):
-            for j in range(cols):
-                data[i, j] = (i + j) % 2
-        state["data"] = data
-    def increment_data():
-        state["data"] += 1
-    def reset_state():
-        state["rows"] = state["cols"] = None
-    st.write(st.beta_state.get("data"))
-    st.button("Increment data", on_click=increment_data)
-    st.button("Reset state", on_click=reset_state)
+    # Setup the state properly
+    state = st.get_state()
+    if state.dim is None:
+        state.dim = 5
+
+    # Initialize the state
+    intended_shape = (state.dim, state.dim)
+    if state.data is None or state.data.shape != intended_shape:
+        state.data = np.zeros(intended_shape, np.int32)
+        for i in range(state.dim):
+            for j in range(state.dim):
+                state.data[i, j] = (i + j) % 2
+    
+    @st.ui.slider("Dimension", 1, 10)
+    def dimension_slider(value):
+        st.warning(f"dimension_slider: `{value}`")
+        state.dim = value
+    dimension_slider()
+
+    st.write(state.data)
+
+    @st.ui.button("Increment")
+    def increment():
+        state.data += 1
+    increment()
+
+    @st.ui.button("Reset")
+    def reset():
+        state.data = None
+    reset()
